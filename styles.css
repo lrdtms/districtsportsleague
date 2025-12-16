@@ -241,6 +241,7 @@ main {
 .footer p {
     margin: 0;
     font-size: 14px;
+    color: white;
 }
 
 /* Responsive Design */
