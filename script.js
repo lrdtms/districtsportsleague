@@ -55,12 +55,25 @@ document.addEventListener('DOMContentLoaded', function() {
     const nextBtn = document.getElementById('nextBtn');
     
     if (newsContainer && prevBtn && nextBtn) {
-        const scrollAmount = 380; // Card width (350px) + gap (30px)
+        // Function to get scroll amount based on screen size
+        function getScrollAmount() {
+            const screenWidth = window.innerWidth;
+            if (screenWidth <= 480) {
+                // Phone: 240px card + 10px gap
+                return 250;
+            } else if (screenWidth <= 768) {
+                // Tablet: 280px card + 15px gap
+                return 295;
+            } else {
+                // Desktop: 350px card + 30px gap
+                return 380;
+            }
+        }
         
         // Next button click
         nextBtn.addEventListener('click', function() {
             newsContainer.scrollBy({
-                left: scrollAmount,
+                left: getScrollAmount(),
                 behavior: 'smooth'
             });
         });
@@ -68,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Previous button click
         prevBtn.addEventListener('click', function() {
             newsContainer.scrollBy({
-                left: -scrollAmount,
+                left: -getScrollAmount(),
                 behavior: 'smooth'
             });
         });
@@ -90,5 +103,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Update button states on scroll
         newsContainer.addEventListener('scroll', updateButtonStates);
+        
+        // Update scroll amount on window resize
+        window.addEventListener('resize', function() {
+            // Recalculate in case user rotates device or resizes window
+            updateButtonStates();
+        });
     }
 });
