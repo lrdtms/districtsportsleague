@@ -62,6 +62,18 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// About: Load More / Show Less
+document.addEventListener('DOMContentLoaded', function() {
+    const aboutMore = document.getElementById('aboutMore');
+    const aboutToggle = document.getElementById('aboutToggle');
+
+    aboutToggle.addEventListener('click', function() {
+        const open = aboutMore.classList.toggle('open');
+        aboutToggle.textContent = open ? 'Show Less' : 'Load More';
+        aboutToggle.setAttribute('aria-expanded', open);
+    });
+});
+
 // News Navigation Functionality
 document.addEventListener('DOMContentLoaded', function() {
     const newsContainer = document.getElementById('newsContainer');

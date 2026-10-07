@@ -155,8 +155,110 @@ main {
     justify-content: center;
 }
 
-.section:nth-child(even) {
+.section:nth-child(odd) {
     background-color: #ecf0f1;
+}
+
+/* About: compact until "Load More" is selected */
+#about {
+    min-height: auto;
+    padding-top: 20px;
+    padding-bottom: 24px;
+}
+
+#about h2 {
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+}
+
+#about p {
+    margin-bottom: 10px;
+}
+
+.about-more {
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition: grid-template-rows 0.4s ease, visibility 0.4s;
+}
+
+.about-more.open {
+    grid-template-rows: 1fr;
+    visibility: visible;
+}
+
+.about-more-inner {
+    overflow: hidden;
+}
+
+.load-more-btn {
+    align-self: flex-start;
+    margin-top: 10px;
+    background-color: #c41e3a;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.load-more-btn:hover {
+    background-color: #8b1a1a;
+    transform: scale(1.05);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .about-more {
+        transition: none;
+    }
+}
+
+/* Home / Hero Section */
+.section.hero {
+    position: relative;
+    overflow: hidden;
+    /* Takes the rest of the first screen; About below only needs its compact height (~240px) */
+    min-height: max(45vh, calc(100vh - 250px));
+    padding: 100px 20px 40px;
+    background: linear-gradient(135deg, #2c3e50 0%, #c41e3a 70%);
+    text-align: center;
+}
+
+.hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Default is 50%; a lower number shows more of the top of the video, so the picture sits lower in the hero */
+    object-position: 50% 34%;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+}
+
+/* Darken only once a video is added, so the gradient shows its true colours until then */
+.hero-video:has(source) + .hero-overlay {
+    background: rgba(0, 0, 0, 0.35);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    align-items: center;
+}
+
+.hero-caption {
+    color: white;
+    font-size: clamp(28px, 6vw, 64px);
+    line-height: 1.2;
+    max-width: 900px;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
 }
 
 .section .container {
@@ -406,9 +508,35 @@ main {
     text-decoration: underline;
 }
 
+/* Gradient sections: same navy/red palette as the hero, a different gradient style each */
+/* Red holds its full accent colour (#c41e3a) before blending, so it matches buttons and highlights */
+#news     { background: linear-gradient(135deg, #2c3e50 0%, #c41e3a 70%); }
+#Team     { background: radial-gradient(circle at 15% 15%, #c41e3a 15%, #2c3e50 85%); }
+#services { background: linear-gradient(180deg, #2c3e50 0%, #c41e3a 70%); }
+#values   { background: conic-gradient(from 0deg at 0% 100%, #2c3e50 0deg, #c41e3a 65deg); }
+#contact  { background: linear-gradient(180deg, #2c3e50 70%, #c41e3a 100%); }
+
+/* Light text on the gradients */
+:is(#news, #Team, #services, #values, #contact) :is(h2, h3, p, li, li strong, a) {
+    color: white;
+}
+
+:is(#news, #Team, #services, #values, #contact) h2 {
+    border-bottom-color: white;
+}
+
+/* News cards stay white, so keep their own dark text */
+#news .news-article h3 { color: #2c3e50; }
+#news .news-article .news-preview { color: #555; }
+#news .news-article .news-date { color: #888; }
+
+#contact .contact-item a {
+    text-decoration: underline;
+}
+
 /* Footer Styles */
 .footer {
-    background-color: #8b1a1a;
+    background-color: #c41e3a;
     color: white;
     text-align: center;
     padding: 30px 0;
