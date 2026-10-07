@@ -74,59 +74,48 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// News Navigation Functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const newsContainer = document.getElementById('newsContainer');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    
-    if (newsContainer && prevBtn && nextBtn) {
-        // Function to get scroll amount based on screen size
-        function getScrollAmount() {
-            // One card plus the gap between cards, whatever size the card is at this width
-            const card = newsContainer.querySelector('.news-article');
-            const gap = parseFloat(getComputedStyle(newsContainer).columnGap) || 0;
-            return card.getBoundingClientRect().width + gap;
-        }
-        
-        // Next button click
-        nextBtn.addEventListener('click', function() {
-            newsContainer.scrollBy({
-                left: getScrollAmount(),
-                behavior: 'smooth'
-            });
-        });
-        
-        // Previous button click
-        prevBtn.addEventListener('click', function() {
-            newsContainer.scrollBy({
-                left: -getScrollAmount(),
-                behavior: 'smooth'
-            });
-        });
-        
-        // Update button states based on scroll position
-        function updateButtonStates() {
-            const scrollLeft = newsContainer.scrollLeft;
-            const maxScroll = newsContainer.scrollWidth - newsContainer.clientWidth;
-            
-            // Disable prev button at start
-            prevBtn.disabled = scrollLeft <= 0;
-            
-            // Disable next button at end
-            nextBtn.disabled = scrollLeft >= maxScroll - 1; // -1 for rounding issues
-        }
-        
-        // Initial button state
-        updateButtonStates();
-        
-        // Update button states on scroll
-        newsContainer.addEventListener('scroll', updateButtonStates);
-        
-        // Update scroll amount on window resize
-        window.addEventListener('resize', function() {
-            // Recalculate in case user rotates device or resizes window
-            updateButtonStates();
-        });
+// Arrow-button carousel, shared by the news feed and the team section
+function setupCarousel(container, prevBtn, nextBtn, cardSelector) {
+    if (!container || !prevBtn || !nextBtn) return;
+
+    // One card plus the gap between cards, whatever size the card is at this width
+    function getScrollAmount() {
+        const card = container.querySelector(cardSelector);
+        const gap = parseFloat(getComputedStyle(container).columnGap) || 0;
+        return card.getBoundingClientRect().width + gap;
     }
+
+    nextBtn.addEventListener('click', function() {
+        container.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+    });
+
+    prevBtn.addEventListener('click', function() {
+        container.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+    });
+
+    // Disable the arrows at either end
+    function updateButtonStates() {
+        const maxScroll = container.scrollWidth - container.clientWidth;
+        prevBtn.disabled = container.scrollLeft <= 0;
+        nextBtn.disabled = container.scrollLeft >= maxScroll - 1; // -1 for rounding issues
+    }
+
+    updateButtonStates();
+    container.addEventListener('scroll', updateButtonStates);
+    window.addEventListener('resize', updateButtonStates);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    setupCarousel(
+        document.getElementById('newsContainer'),
+        document.getElementById('prevBtn'),
+        document.getElementById('nextBtn'),
+        '.news-article'
+    );
+    setupCarousel(
+        document.getElementById('teamContainer'),
+        document.getElementById('teamPrev'),
+        document.getElementById('teamNext'),
+        '.director-card'
+    );
 });
