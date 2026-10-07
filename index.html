@@ -24,13 +24,17 @@
             <nav class="nav">
                 <button class="nav-btn" data-target="about">About</button>
                 <button class="nav-btn" data-target="news">News</button>
-                <button class="nav-btn" data-target="who-we-are">Who We Are</button>
-                <button class="nav-btn" data-target="Team">Team</button>
-                <button class="nav-btn" data-target="mission">Our Mission</button>
-                <button class="nav-btn" data-target="services">What We Do</button>
-                <button class="nav-btn" data-target="impact">Our Impact</button>
-                <button class="nav-btn" data-target="values">Our Values</button>
-                <button class="nav-btn" data-target="leadership">Leadership</button>
+                <div class="nav-dropdown">
+                    <button class="nav-btn nav-dropdown-toggle" aria-haspopup="true" aria-expanded="false">Explore &#9662;</button>
+                    <div class="nav-dropdown-menu">
+                        <button class="dropdown-item" data-target="who-we-are">Who We Are</button>
+                        <button class="dropdown-item" data-target="Team">Team</button>
+                        <button class="dropdown-item" data-target="mission">Our Mission</button>
+                        <button class="dropdown-item" data-target="services">What We Do</button>
+                        <button class="dropdown-item" data-target="impact">Our Impact</button>
+                        <button class="dropdown-item" data-target="values">Our Values</button>
+                    </div>
+                </div>
                 <button class="nav-btn" data-target="contact">Contact</button>
             </nav>
         </div>

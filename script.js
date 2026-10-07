@@ -1,8 +1,21 @@
 // Smooth Scroll Functionality
 document.addEventListener('DOMContentLoaded', function() {
     // Get all navigation buttons
-    const navButtons = document.querySelectorAll('.nav-btn');
-    
+    const navButtons = document.querySelectorAll('[data-target]');
+    const dropdown = document.querySelector('.nav-dropdown');
+    const dropdownToggle = document.querySelector('.nav-dropdown-toggle');
+
+    // Dropdown: click/tap toggle (hover is handled in CSS)
+    dropdownToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const open = dropdown.classList.toggle('open');
+        dropdownToggle.setAttribute('aria-expanded', open);
+    });
+    document.addEventListener('click', function() {
+        dropdown.classList.remove('open');
+        dropdownToggle.setAttribute('aria-expanded', 'false');
+    });
+
     // Add click event listener to each button
     navButtons.forEach(button => {
         button.addEventListener('click', function() {
@@ -43,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (activeButton) {
                     activeButton.classList.add('active');
                 }
+                dropdownToggle.classList.toggle('has-active', !!(activeButton && dropdown.contains(activeButton)));
             }
         });
     });
@@ -57,17 +71,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if (newsContainer && prevBtn && nextBtn) {
         // Function to get scroll amount based on screen size
         function getScrollAmount() {
-            const screenWidth = window.innerWidth;
-            if (screenWidth <= 480) {
-                // Phone: 240px card + 10px gap
-                return 250;
-            } else if (screenWidth <= 768) {
-                // Tablet: 280px card + 15px gap
-                return 295;
-            } else {
-                // Desktop: 350px card + 30px gap
-                return 380;
-            }
+            // One card plus the gap between cards, whatever size the card is at this width
+            const card = newsContainer.querySelector('.news-article');
+            const gap = parseFloat(getComputedStyle(newsContainer).columnGap) || 0;
+            return card.getBoundingClientRect().width + gap;
         }
         
         // Next button click
