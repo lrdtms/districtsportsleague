@@ -514,15 +514,19 @@ main {
 #services { background: linear-gradient(180deg, #2c3e50 0%, #c41e3a 70%); }
 #values   { background: conic-gradient(from 0deg at 0% 100%, #2c3e50 0deg, #c41e3a 65deg); }
 #contact  { background: linear-gradient(180deg, #2c3e50 70%, #c41e3a 100%); }
+#partners { background: linear-gradient(315deg, #2c3e50 0%, #c41e3a 70%); }
 
 /* Light text on the gradients */
-:is(#news, #Team, #services, #values, #contact) :is(h2, h3, p, li, li strong, a) {
+:is(#news, #Team, #services, #values, #contact, #partners) :is(h2, h3, p, li, li strong, a) {
     color: white;
 }
 
-:is(#news, #Team, #services, #values, #contact) h2 {
+:is(#news, #Team, #services, #values, #contact, #partners) h2 {
     border-bottom-color: white;
 }
+
+/* Partner cards stay white, so keep their own dark text */
+#partners .partner-card h3 { color: #2c3e50; }
 
 /* News cards stay white, so keep their own dark text */
 #news .news-article h3 { color: #2c3e50; }
@@ -670,6 +674,15 @@ main {
         padding: 10px 20px;
         font-size: 14px;
     }
+
+    .partner-card {
+        min-height: 110px;
+        margin-right: 12px;
+    }
+
+    .partner-card h3 {
+        font-size: 18px;
+    }
 }
 /* Article Page Styles */
 .article-page {
@@ -776,3 +789,173 @@ main {
 .article-quote { margin: 1.25rem 0; padding: 0.5rem 1.25rem; border-left: 4px solid var(--accent, #c41e3a); font-style: italic; }
 .article-quote p { margin: 0 0 0.5rem; }
 .article-quote cite { font-style: normal; font-weight: 600; }
+
+/* Programmes and Partners sections */
+.programme-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 420px;
+    margin-bottom: 20px;
+}
+
+.programme-picker label {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.programme-picker select {
+    padding: 12px 16px;
+    font-size: 16px;
+    border: 2px solid #c41e3a;
+    border-radius: 5px;
+    background-color: white;
+    color: #2c3e50;
+    cursor: pointer;
+}
+
+.programme-panel a {
+    color: #c41e3a;
+}
+
+.programme-panel h3 {
+    color: #2c3e50;
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+
+/* Break out of the centred container so cards slide off the edges of the screen, not the content column */
+#partners {
+    overflow: hidden;
+}
+
+.partner-marquee {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    overflow: hidden;
+    margin-top: 20px;
+    padding: 10px 0;
+}
+
+/* script.js repeats the cards, then sets --partner-shift (one set's width) and --partner-duration */
+.partner-track {
+    display: flex;
+    width: max-content;
+    animation: partner-scroll var(--partner-duration, 20s) linear infinite;
+}
+
+.partner-marquee:hover .partner-track {
+    animation-play-state: paused;
+}
+
+@keyframes partner-scroll {
+    to { transform: translateX(calc(-1 * var(--partner-shift, 0px))); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .partner-marquee { overflow-x: auto; }
+    .partner-track { animation: none; }
+}
+
+.partner-card {
+    /* Full width of the screen minus room for the margins, capped at 260px, so a card is never cut off on a phone */
+    flex: 0 0 clamp(180px, calc(100vw - 120px), 260px);
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 140px;
+    padding: 20px;
+    text-align: center;
+    background-color: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.partner-card h3 {
+    color: #2c3e50;
+    font-size: 20px;
+    margin: 0;
+}
+
+.article-figure figcaption { margin-top: 0.5rem; font-size: 14px; font-style: italic; color: #666; }
+
+.partner-card {
+    text-decoration: none;
+    color: inherit;
+}
+
+a.partner-card {
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+a.partner-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+}
+
+.partner-cta {
+    margin-top: 25px;
+}
+
+.programme-panel h4 {
+    color: #2c3e50;
+    font-size: 18px;
+    margin: 20px 0 8px;
+}
+
+.programme-photos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.programme-photos img {
+    flex: 1 1 260px;
+    min-width: 0;
+    max-width: 100%;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Programme dropdown: red highlight instead of the browser's default blue.
+   Browsers that support customisable selects (Chrome, Edge) use this; others keep their native list. */
+@supports (appearance: base-select) {
+    .programme-picker select,
+    .programme-picker select::picker(select) {
+        appearance: base-select;
+    }
+
+    .programme-picker select::picker(select) {
+        border: 2px solid #c41e3a;
+        border-radius: 5px;
+        background-color: white;
+        padding: 4px 0;
+    }
+
+    .programme-picker select option {
+        padding: 10px 16px;
+        color: #2c3e50;
+        cursor: pointer;
+    }
+
+    .programme-picker select option:hover,
+    .programme-picker select option:focus,
+    .programme-picker select option:checked {
+        background-color: #c41e3a;
+        color: white;
+    }
+
+    .programme-picker select option::checkmark {
+        color: white;
+    }
+}
+
+.programme-picker select:focus-visible {
+    outline: 2px solid #c41e3a;
+    outline-offset: 2px;
+}

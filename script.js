@@ -119,3 +119,48 @@ document.addEventListener('DOMContentLoaded', function() {
         '.director-card'
     );
 });
+
+// Programmes: the dropdown chooses which programme panel is shown
+document.addEventListener('DOMContentLoaded', function() {
+    const select = document.getElementById('programmeSelect');
+    if (!select) return;
+    const panels = document.querySelectorAll('.programme-panel');
+
+    function showProgramme() {
+        panels.forEach(panel => { panel.hidden = panel.id !== select.value; });
+    }
+
+    select.addEventListener('change', showProgramme);
+    showProgramme();
+});
+
+// Partners: cards scroll sideways in a continuous loop
+document.addEventListener('DOMContentLoaded', function() {
+    const marquee = document.getElementById('partnerMarquee');
+    const track = document.getElementById('partnerTrack');
+    if (!marquee || !track) return;
+
+    const originals = Array.from(track.children);
+    const PIXELS_PER_SECOND = 50;
+
+    function build() {
+        // Reset to the original cards, then repeat them until the track is wide enough to loop without a gap
+        track.querySelectorAll('[data-clone]').forEach(el => el.remove());
+        const setWidth = track.scrollWidth;
+        const copies = Math.ceil(marquee.clientWidth / setWidth) + 1;
+        for (let i = 0; i < copies; i++) {
+            originals.forEach(card => {
+                const clone = card.cloneNode(true);
+                clone.setAttribute('data-clone', '');
+                clone.setAttribute('aria-hidden', 'true');
+                clone.setAttribute('tabindex', '-1');
+                track.appendChild(clone);
+            });
+        }
+        track.style.setProperty('--partner-shift', setWidth + 'px');
+        track.style.setProperty('--partner-duration', (setWidth / PIXELS_PER_SECOND) + 's');
+    }
+
+    build();
+    window.addEventListener('resize', build);
+});
